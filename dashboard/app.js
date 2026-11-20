@@ -665,14 +665,14 @@
     var holdDays = holdDaysFor(row.age_days);
     var weeks = Math.ceil(holdDays / 7);
     var totalGas = setupGas + weeklyGas * weeks;
-    var opportunityCost = implied * DATA.model.opportunity_apy * (holdDaysFor(row.age_days) / 365);
+    var opportunityCost = capital * DATA.model.opportunity_apy * (holdDaysFor(row.age_days) / 365);
     
     var html = '<div class="sens-wrap"><table class="sens-table"><thead><tr><th>Capital</th><th>Airdrop Share</th><th>Implied Value</th><th>Value Used (P25)</th><th>Farmer Slice</th><th>Total Cost</th><th>Net</th><th>$/hr</th><th>Verdict</th></tr></thead><tbody>';
     capitals.forEach(function(cap) {
       shares.forEach(function(share) {
         var lowEndValue = implied * DATA.model.p25;
         var slice = lowEndValue * share * DATA.model.farming_tvl_share * (holdDaysFor(row.age_days) / DATA.model.season_days);
-        var opportunityCost = implied * DATA.model.opportunity_apy * (holdDaysFor(row.age_days) / 365);
+        var opportunityCost = capital * DATA.model.opportunity_apy * (holdDaysFor(row.age_days) / 365);
         var gasCost = DATA.model.gas_per_tx * DATA.model.txs_per_farm;
         var totalCost = gasCost + opportunityCost;
         var net = slice - totalCost;

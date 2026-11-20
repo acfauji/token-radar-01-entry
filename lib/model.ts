@@ -92,8 +92,8 @@ export const MODEL: ModelConstants = {
   gas_per_tx: 5,               // $5 per tx (Ethereum mainnet avg)
   txs_per_farm: 3,             // 3 gas transactions per farm
   opportunity_apy: 0.08,       // 8% opportunity cost
-  verdict_farm_threshold: 25,  // net $/hr >= 25 -> FARM
-  verdict_marginal_threshold: 0, // net $/hr >= 0 -> MARGINAL
+  verdict_farm_threshold: 1000,  // net $/hr >= 1000 -> FARM
+    verdict_marginal_threshold: 500, // net $/hr >= 500 -> MARGINAL
   // Leave-one-out residual quantiles (from 115 clean traded tokens)
   p10: 0.11,
   p25: 0.24,
@@ -508,30 +508,32 @@ function computeLaunchOdds(
 /** Compute economic verdict and net $/hr. */
 function computeVerdict(
   impliedValue: number,
+  protocol: SnapshotProtocol,
   model: ModelConstants,
   ageDays: number | null
 ): { verdict: 'FARM' | 'MARGINAL' | 'SKIP'; net_usd_per_hr: number } {
   const holdDays = holdDaysFor(ageDays);
   const weeks = Math.max(1, Math.ceil(holdDays / 7));
-  
+  const capital = capitalFor(protocol);
+
   // Farmer slice at low end of value range (P25)
   const lowEndValue = impliedValue * MODEL.p25;
   const slice = lowEndValue * model.airdrop_share * model.farming_tvl_share * (holdDays / model.season_days);
-  
+
   // Costs
   const gasCost = model.gas_per_tx * model.txs_per_farm;
-  const opportunityCost = impliedValue * model.opportunity_apy * (holdDays / 365);
+  const opportunityCost = capital * model.opportunity_apy * (holdDays / 365);
   const totalCost = gasCost + opportunityCost;
-  
+
   const net = slice - totalCost;
   const hours = weeks * 0.5 + 0.5; // 30 min setup + 10 min/week
   const netPerHr = hours > 0 ? net / hours : 0;
-  
+
   let verdict: 'FARM' | 'MARGINAL' | 'SKIP';
   if (netPerHr >= model.verdict_farm_threshold) verdict = 'FARM';
   else if (netPerHr >= model.verdict_marginal_threshold) verdict = 'MARGINAL';
   else verdict = 'SKIP';
-  
+
   return { verdict, net_usd_per_hr: Math.round(netPerHr * 100) / 100 };
 }
 
@@ -724,7 +726,7 @@ export function buildRadar(snapshot: Snapshot, model: ModelConstants = MODEL): {
     const rank_p25 = Math.max(1, Math.round(implied * 0.9));
     const rank_p75 = Math.min(999999, Math.round(implied * 1.1));
     
-    const { verdict, net_usd_per_hr } = computeVerdict(implied, model, components.age);
+    const { verdict, net_usd_per_hr } = computeVerdict(implied, p, model, components.age);
     
     return { 
       p, implied, value_if_launches: components.value_if_launches, launch_odds,
