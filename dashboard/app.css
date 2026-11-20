@@ -174,9 +174,17 @@ tbody tr[data-selected="true"] { background: color-mix(in srgb, var(--accent) 10
 .sens-table th:first-child, .sens-table td:first-child { text-align: left; font-weight: 500; }
 .sens-table thead th { background: var(--canvas); color: var(--muted); font-size: 12px; }
 .sens-table tbody tr:nth-child(even) { background: var(--canvas); }
-.sens-table .pos { color: #1a8a4a; }
-.sens-table .neg { color: var(--negative); }
-.sens-table .thin { color: var(--warning); }
+.pos { color: #1a8a4a; }
+.neg { color: var(--negative); }
+.thin { color: var(--warning); }
+
+/* Verdict badge colors */
+.status.farm { color: #1a8a4a; }
+.status.marginal { color: var(--warning); }
+.status.skip { color: var(--negative); }
+.status.farm::before { background: #1a8a4a; }
+.status.marginal::before { background: var(--warning); }
+.status.skip::before { background: var(--negative); }
 
 /* Research Note */
 .research-note { line-height: 1.7; color: var(--ink); }
