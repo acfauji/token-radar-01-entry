@@ -1,0 +1,39 @@
+{
+  "a": 7.221231106040812,
+  "b": 0.5618523371152596,
+  "outlier_threshold": 1.4771212547196624,
+  "outliers": [
+    "aave-v2",
+    "acryptos",
+    "bifi",
+    "bitway-earn",
+    "concentrator",
+    "flokifi-locker",
+    "gravity-bridge",
+    "kava-lend",
+    "mantle-bridge",
+    "nexo",
+    "obol",
+    "rain",
+    "xdai-stake-bridge"
+  ],
+  "median_miss": 3.0362804697545904,
+  "within_3x": 47.82608695652174,
+  "within_5x": 65.21739130434783,
+  "family_factors": {
+    "Lending": 0.6621004698977528,
+    "Dexs": 1.0974505496172224,
+    "Liquid Staking": 0.5798861456209985,
+    "Yield": 0.8575218482879253,
+    "CEX": 2.029844075165933,
+    "RWA": 1.3159941609257784,
+    "Canonical Bridge": 2.436356777918192,
+    "Basis Trading": 1.56318800408331,
+    "Bridge": 1.4702451208609073,
+    "Cross Chain Bridge": 2.5,
+    "Yield Aggregator": 0.843470874531608,
+    "Indexes": 0.7485063768764121,
+    "CDP": 0.905503999499207,
+    "Privacy": 2.5
+  }
+}
